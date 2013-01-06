@@ -1,0 +1,16 @@
+Pdftk is not public domain software.  It is licensed to the public under the GNU General Public License (GPL).  Pdftk uses third-party libraries which have their own licenses.  The exact licensing terms can be found on the pdftk license web page: http://www.pdflabs.com/docs/pdftk-license/.  Source code for pdftk and for these third-party libraries is available from this same page.
+
+If you write software that uses any portion of pdftk and plan to distribute it along with your software, you will need a commercial license.  The exception to this rule is if your software is licensed to the public under the GPL or another compatible license.
+
+Commercial licenses are available for pdftk.  They include commercial-grade support and allow commercial redistribution. Please email sid.steward at pdflabs dot com to learn more. And please include pdftk in your email subject.  Thank you.
+
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
