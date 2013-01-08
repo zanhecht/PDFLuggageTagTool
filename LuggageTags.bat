@@ -10,37 +10,22 @@ SET Size2=12
 SET Size3=12
 SET Size4=12
 SET OutName=
+Set TitleStr=Royal Caribbean Luggage Tag Rearranger Version 1.2 Created 01/07/2013 by ahecht
 
+
+:Start
 CLS
-ECHO ==============================================================================
-ECHO                     Royal Caribbean Luggage Tag Rearranger
-ECHO ==============================================================================
+ECHO %TitleStr%
 ECHO.
-ECHO This script will extract the luggage tags from your Royal Caribbean cruise
-ECHO documents and place four of them on a single page for easy printing. It can
-ECHO also insert names onto the luggage tags.
+ECHO Close this window to exit.
 ECHO.
-ECHO This script and its constituant programs are distributed under the GPL or
-ECHO similar open licenses. Please see the doc folder for more information.
-ECHO.
-ECHO This program is in no way affiliated with nor endorsed by Royal Caribbean
-ECHO International or Royal Caribbean Cruises Ltd.
-ECHO.
-ECHO ===================Version 1.0 Created 01/06/2013 by ahecht===================
-ECHO.
-ECHO Hit the ENTER key after each entry
-ECHO.
-ECHO What would you like to do?
-ECHO [1] Create a PDF page with 4 luggage tags
-ECHO [2] Perform additional processing on an existing PDF file
-ECHO [3] Exit
-Choose32 -l -n -c 123 -p "[Press 1, 2, or 3] "
-CLS
+Wbox "%TitleStr%" ^
+ "This script will extract the luggage tags from your Royal Caribbean cruise documents and place four of them on a single page for easy printing. It can also insert names onto the luggage tags.^^This script and its constituant programs are distributed under the GPL or similar open licenses. Please see the doc folder for more information.^^This program is in no way affiliated with nor endorsed by Royal Caribbean International or Royal Caribbean Cruises Ltd." ^
+ "Create PDF with 4 tags on one page;Additional PDF tools;Exit" ^
+  /WW=640 /BW=210 /DB=1 /OT /AL
 IF Errorlevel 3 GOTO End
 IF Errorlevel 2 GOTO Utils
 IF Errorlevel 1 GOTO Init
-ECHO ERROR
-PAUSE
 GOTO End
 
 
@@ -56,68 +41,67 @@ SET OutName=
 
 
 :ChooseDocs
-ECHO On the next screen you will select your cruise documents PDF file. The first
-ECHO page of the document should say "GUEST TICKET BOOKLET", not "SetSail".
-ECHO.
-PAUSE
-FOR /f "delims=" %%a in ('Wfile.exe "SET FilePath=" ".\*.pdf" "Select your Cruise Documents PDF file..."') do %%a
+Wbox "Select your Cruise Documents PDF file..." ^
+ "Your cruise documents are a long PDF file with ''GUEST TICKET BOOKLET'' on the first page. You can get this file from RoyalCaribbean.com or your travel agent 40-45 days before your cruise.^ ^Hit the ''Open...'' button below and select your cruise documents PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
+ECHO Opening File . . .
+Wfile "SET FilePath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
+IF Errorlevel 1 (GOTO End)
+CALL temp.bat
+ECHO %FilePath%
 FOR %%F in (%FilePath%) do set FileName=%%~nF%%~xF
-ECHO You have selected %FileName%
-REM IF NOT EXIST "%FileName%" (COPY /Y %FilePath% "%~dp0\%FileName%")
 GOTO Choices
 
 
 :AskAgain
-ECHO Is %FilePath%
-Choose32 -l -n -p "the correct location of your cruise documents [Press Y or N]? "
-IF Errorlevel 2 (
-	CLS	
-	GOTO ChooseDocs
-	)
-
+FOR %%F in (%FilePath%) do set FilePathNQ=%%~F
+Wbox "Select your Cruise Documents PDF file..." ^
+ "Is ''%FilePathNQ%'' the correct location of your cruise documents?" "Yes;No" /WW=320 /DB=1 /OT /AL
+IF Errorlevel 2 (GOTO ChooseDocs)
 
 :Choices
-CLS
-ECHO What page of the %FileName% are your luggage tags on?
-ECHO.
-ECHO You can determine this by opening the cruise documents in Adobe Reader or
-SET /p TagPage=other PDF software. [Leave blank for %TagPage%]:  %=%
-CLS
+
+winput "Page Number" "SET TagPage=$input" ^
+ "What page of %FileName% are your luggage tags on?^ ^You can determine this by opening the cruise documents in Adobe Reader or other PDF software." ^
+ "%TagPage%" /num > temp.bat
+CALL temp.bat
+
 IF NOT DEFINED Name1 (
-	ECHO You can have this program insert the Guest Name onto the four luggage tags
-	ECHO automatically. You can skip this step by leaving the name for tag #1 blank.
-	ECHO.
-	SET /p Name1=Enter Guest Name for Tag #1 [Leave blank to skip]: %=%
+	winput "Luggage Tag #1" "SET Name1=$input" ^
+ "You can have this program insert the Guest Name onto the four luggage tags^automatically. You can skip this step by pressing CANCEL or leaving this name^blank.^ ^Enter a name for Luggage Tag #1:" > temp.bat
+	IF Errorlevel 1 (SET Name1=)
+	CALL temp.bat
 ) ELSE (
-	SET /p Name1=Enter Guest Name for Tag #1 [Leave blank for !Name1!]: %=%
-	CLS
-	ECHO Enter Guest Name for Tag #1 [Leave blank for !Name1!]: !Name1!
-	ECHO.
-	ECHO Most names will fit onto the luggage tags at font size 12. However, if your
-	ECHO name is 15 letters or less, size 18 would be a better choice. If your name
-	ECHO appears too large or too small on the finished tags, you can use the "Modify
-	ECHO current tags" option at the end of this program to try a different size.
-	ECHO.
-	SET /p Size1=Enter Font Size for Tag #1 [Leave blank for !Size1!]: %=%
-	CLS
-	SET /p Name2=Enter Guest Name for Tag #2 [Leave blank for !Name2!]: %=%
-	CLS
-	ECHO Enter Guest Name for Tag #2 [Leave blank for !Name2!]: !Name2!
-	ECHO.
-	SET /p Size2=Enter Font Size for Tag #2 [Leave blank for !Size2!]: %=%
-	CLS
-	SET /p Name3=Enter Guest Name for Tag #3 [Leave blank for !Name3!]: %=%
-	CLS
-	ECHO Enter Guest Name for Tag #3 [Leave blank for !Name3!]: !Name3!
-	ECHO.
-	SET /p Size3=Enter Font Size for Tag #3 [Leave blank for !Size3!]: %=%
-	CLS
-	SET /p Name4=Enter Guest Name for Tag #4 [Leave blank for !Name4!]: %=%
-	CLS
-	ECHO Enter Guest Name for Tag #4 [Leave blank for !Name4!]: !Name4!
-	ECHO.
-	SET /p Size4=Enter Font Size for Tag #4 [Leave blank for !Size4!]: %=%
-	CLS
+	winput "Luggage Tag #1" "SET Name1=$input" ^
+ "Enter a name for Luggage Tag #1:" "!Name1!" > temp.bat
+	IF Errorlevel 1 (SET Name1=)
+	CALL temp.bat
+	winput "Luggage Tag #1" "SET Size1=$input" ^
+ "Enter Font Size for Tag #1:" "!Size1!" /num > temp.bat
+	CALL temp.bat
+
+	winput "Luggage Tag #2" "SET Name2=$input" ^
+ "Enter a name for Luggage Tag #2:" "!Name2!" > temp.bat
+	IF Errorlevel 1 (SET Name2=)
+	CALL temp.bat
+	winput "Luggage Tag #2" "SET Size2=$input" ^
+ "Enter Font Size for Tag #2:" "!Size2!" /num > temp.bat
+	CALL temp.bat
+	
+	winput "Luggage Tag #3" "SET Name3=$input" ^
+ "Enter a name for Luggage Tag #3:" "!Name3!" > temp.bat
+	IF Errorlevel 1 (SET Name3=)
+	CALL temp.bat
+	winput "Luggage Tag #3" "SET Size3=$input" ^
+ "Enter Font Size for Tag #3:" "!Size3!" /num > temp.bat
+	CALL temp.bat
+	
+	winput "Luggage Tag #4" "SET Name4=$input" ^
+ "Enter a name for Luggage Tag #4:" "!Name4!" > temp.bat
+	IF Errorlevel 1 (SET Name4=)
+	CALL temp.bat
+	winput "Luggage Tag #4" "SET Size4=$input" ^
+ "Enter Font Size for Tag #4:" "!Size4!" /num > temp.bat
+	CALL temp.bat
 	GOTO OutAgain
 )
 IF NOT DEFINED Name1 (
@@ -125,106 +109,102 @@ IF NOT DEFINED Name1 (
 	SET Name3=
 	SET Name4=
 ) ELSE (
-	CLS
-	ECHO You can have this program insert the Guest Name onto the four luggage tags
-	ECHO automatically. You can skip this step by leaving the name for tag #1 blank.
-	ECHO.
-	ECHO Enter Guest Name for Tag #1 [Leave blank to skip]: !Name1!
-	ECHO.
-	ECHO Most names will fit onto the luggage tags at font size 12. However, if your
-	ECHO name is 15 letters or less, size 18 would be a better choice. If your name
-	ECHO appears too large or too small on the finished tags, you can use the "Modify
-	ECHO current tags" option at the end of this program to try a different size.
-	ECHO.
-	SET /p Size1=Enter Font Size for Tag #1 [Leave blank for !Size1!]: %=%
-	CLS
+	winput "Luggage Tag #1" "SET Size1=$input" ^
+ "Most names will fit onto the luggage tags at font size 12. However, if your^name is 15 letters or less, size 18 would be a better choice. If your name^appears too large or too small on the finished tags, you can use the ''Modify^current tags'' option at the end of this program to try a different size.^ ^Enter Font Size for Tag #1:" "%Size1%" /num > temp.bat
+	CALL temp.bat
+
 	SET Name2=!Name1!
-	Set Size2=!Size1!
-	SET /p Name2=Enter Guest Name for Tag #2 [Leave blank for !Name2!]: %=%
-	CLS
-	ECHO Enter Guest Name for Tag #2 [Leave blank for !Name1!]: !Name2!
-	ECHO.
-	SET /p Size2=Enter Font Size for Tag #2 [Leave blank for !Size2!]: %=%
-	CLS
+	SET Size2=!Size1!
+
+	winput "Luggage Tag #2" "SET Name2=$input" ^
+ "Enter a name for Luggage Tag #2:" "!Name2!" > temp.bat
+	IF Errorlevel 1 (SET Name2=)
+	CALL temp.bat
+	winput "Luggage Tag #2" "SET Size2=$input" ^
+ "Enter Font Size for Tag #2:" "!Size2!" /num > temp.bat
+	CALL temp.bat
+
 	SET Name3=!Name2!
 	Set Size3=!Size2!
-	SET /p Name3=Enter Guest Name for Tag #3 [Leave blank for !Name3!]: %=%
-	CLS
-	ECHO Enter Guest Name for Tag #3 [Leave blank for !Name2!]: !Name3!
-	ECHO.
-	SET /p Size3=Enter Font Size for Tag #3 [Leave blank for !Size3!]: %=%
-	CLS
+	
+	winput "Luggage Tag #3" "SET Name3=$input" ^
+ "Enter a name for Luggage Tag #3:" "!Name3!" > temp.bat
+	IF Errorlevel 1 (SET Name3=)
+	CALL temp.bat
+	winput "Luggage Tag #3" "SET Size3=$input" ^
+ "Enter Font Size for Tag #3:" "!Size3!" /num > temp.bat
+	CALL temp.bat
+	
 	SET Name4=!Name3!
 	Set Size4=!Size3!
-	SET /p Name4=Enter Guest Name for Tag #4 [Leave blank for !Name4!]: %=%
-	CLS
-	ECHO Enter Guest Name for Tag #4 [Leave blank for !Name3!]: !Name4!
-	ECHO.
-	SET /p Size4=Enter Font Size for Tag #4 [Leave blank for !Size4!]: %=%
-	CLS
+	
+	winput "Luggage Tag #4" "SET Name4=$input" ^
+ "Enter a name for Luggage Tag #4:" "!Name4!" > temp.bat
+	IF Errorlevel 1 (SET Name4=)
+	CALL temp.bat
+	winput "Luggage Tag #4" "SET Size4=$input" ^
+ "Enter Font Size for Tag #4:" "!Size4!" /num > temp.bat
+	CALL temp.bat
 )
 
 
 :OutAgain
-CLS
-ECHO A new PDF file will be created with four luggage tags on a single page.
-ECHO.
-ECHO On the next screen you will choose a name for this new PDF file. It should be
-ECHO different from the name of your cruise documents.
-ECHO.
-PAUSE
-ECHO.
-FOR /f "delims=" %%a in ('Wfile.exe "SET OutPath=" "%~dp0\*.pdf" "Save As..." /maynotexist') do %%a
+Wbox "Save As..." ^
+ "A new PDF file will be created with four luggage tags on a single page.^ ^Click on ''Save As...'' below to choose a name and location for this new PDF file. It should be different from the name of your cruise documents." "Save As..." /WW=320 /DB=1 /OT /AL
+
+Wfile "SET OutPath=" "%~dp0*.pdf" "Save As..." /maynotexist > temp.bat
+IF Errorlevel 1 (GOTO ReDO)
+CALL temp.bat
+
 FOR %%F in (%OutPath%) do set OutExt=%%~xF
 FOR %%F in (%OutPath%) do set OutName=%%~nF%%~xF
 FOR %%F in (%OutPath%) do set OutPathOnly=%%~dF%%~pF
 IF /I NOT "%OutExt%"==".pdf" (SET OutName=%OutName%.pdf)
 SET OutPath="%OutPathOnly%%OutName%"
 
-CLS
-ECHO You entered %OutPath%
-ECHO.
 IF EXIST %OutPath% GOTO RepOut
 
 
 :BackRepOut
-CLS
-ECHO You entered the following:
-ECHO.
-ECHO Input File Name: %FileName%
-ECHO Tag Page: %TagPage%
+
 IF DEFINED Name1 (
-	ECHO Names: %Name1%, %Name2%, %Name3%, and %Name4%
-	ECHO Font Sizes: %Size1%, %Size2%, %Size3%, and %Size4%.
-) ELSE (ECHO Tags will be printed without names)
-ECHO Your luggage tags will be combined into a file called %OutName%
-ECHO which will be placed in the following directory:
-ECHO %OutPathOnly%
-ECHO.
-Choose32 -l -n -p "Is this correct [Press Y or N]? "
-IF Errorlevel 2 (
-	CLS	
-	GOTO AskAgain
-	)
+	Set ConfNames=Names: %Name1%, %Name2%, %Name3%, and %Name4%; ;Font Sizes: %Size1%, %Size2%, %Size3%, and %Size4%.
+) ELSE (Set ConfNames=Tags will be printed without names)
+
+Wbox "Confirm Settings" ^
+ "You entered the following:; ;Input File Name: %FileName%; ;Tag Page #: %TagPage%; ;%ConfNames%; ;Your luggage tags will be combined into a file called ''%OutName%'' which will be placed in the following directory:;%OutPathOnly%; ;Is this information correct?" "Yes;No" /WW=320 /DB=1 /CR=; /OT /AL
+IF Errorlevel 2 (GOTO AskAgain)
+
 
 :Run
 CLS
-ECHO Extracting Tag from Docs . . .
+ECHO %TitleStr%
+ECHO.
+ECHO Close this window to exit.
+ECHO.
+ECHO Rearranging Luggage Tags . . .
+START Wbusy "Rearranging Luggage Tags" " Extracting Tag from Docs..." /marquee
 gswin32c -q -dBATCH -dNOPAUSE -o tag1.tmp -sDEVICE=pdfwrite -dUseCropbox -dFirstPage=%TagPage% -dLastPage=%TagPage% %FilePath%
 
-
-ECHO Cropping Tag . . .
-xvi32.exe tag1.tmp /S=bin\crop.xsc
+START Wbusy "Rearranging Luggage Tags" "Cropping Tag..." /marquee
+xvi32 tag1.tmp /S=bin\crop.xsc
 gswin32c -q -dBATCH -dNOPAUSE -o tag2.tmp -sDEVICE=pdfwrite -dUseCropbox tag1.tmp
 CLS
-ECHO Extracting Tag from Docs . . .
-ECHO Cropping Tag . . .
-xvi32.exe tag2.tmp /S=bin\uncrop.xsc
+ECHO %TitleStr%
+ECHO.
+ECHO Close this window to exit.
+ECHO.
+ECHO Rearranging Luggage Tags . . .
+xvi32 tag2.tmp /S=bin\uncrop.xsc
 gswin32c -q -dBATCH -dNOPAUSE -o tagstamp.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [5.35 0]>>setpagedevice" -f tag2.tmp
 CLS
-ECHO Extracting Tag from Docs . . .
-ECHO Cropping Tag . . .
-ECHO Creating 4 tags . . .
+ECHO %TitleStr%
+ECHO.
+ECHO Close this window to exit.
+ECHO.
+ECHO Rearranging Luggage Tags . . .
+
+START Wbusy "Rearranging Luggage Tags" "Creating 4 tags..." /marquee
 gswin32c -q -dBATCH -dNOPAUSE -o tag1name.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=126 -dDEVICEHEIGHTPOINTS=792 ^
      -c "/Helvetica-Narrow-Bold findfont %Size1% scalefont setfont newpath 63 370.2 moveto (%Name1%) dup stringwidth pop 2 div neg 0 rmoveto show quit" -f
 pdftk tagstamp.tmp stamp tag1name.tmp output tag1.tmp
@@ -238,15 +218,13 @@ gswin32c -q -dBATCH -dNOPAUSE -o tag4name.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOI
      -c "/Helvetica-Narrow-Bold findfont %Size4% scalefont setfont newpath 63 370.2 moveto (%Name4%) dup stringwidth pop 2 div neg 0 rmoveto show quit" -f
 pdftk tagstamp.tmp stamp tag4name.tmp output tag4.tmp
 
-
-ECHO Arranging tags . . .
+START Wbusy "Rearranging Luggage Tags" "Arranging tags..." /marquee
 gswin32c -q -dBATCH -dNOPAUSE -o tag1s.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [-194.4 0]>>setpagedevice" -f tag1.tmp
 gswin32c -q -dBATCH -dNOPAUSE -o tag2s.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [-64.8 0]>>setpagedevice" -f tag2.tmp
 gswin32c -q -dBATCH -dNOPAUSE -o tag3s.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [64.8 0]>>setpagedevice" -f tag3.tmp
 gswin32c -q -dBATCH -dNOPAUSE -o tag4s.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [194.4 0]>>setpagedevice" -f tag4.tmp
 
-
-ECHO Combining tags onto 1 page . . .
+START Wbusy "Rearranging Luggage Tags" "Combining tags onto 1 page..." /marquee
 pdftk tag1s.tmp stamp tag2s.tmp output tag1.tmp
 pdftk tag1.tmp stamp tag3s.tmp output tag2.tmp
 pdftk tag2.tmp stamp tag4s.tmp output tag3.tmp
@@ -260,144 +238,173 @@ gswin32c -q -dBATCH -dNOPAUSE -o tagstamp.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOI
 	 quit -f
 pdftk tag3.tmp stamp tagstamp.tmp output output.tmp
 
-
-ECHO Cleaning up . . .
+START Wbusy "Rearranging Luggage Tags" "Cleaning up..." /marquee
 move /Y output.tmp %OutPath%
 del *.tmp
-
+del temp.bat
 CLS
-ECHO Extracting Tag from Docs . . .
-ECHO Cropping Tag . . .
-ECHO Creating 4 tags . . .
-ECHO Arranging tags . . .
-ECHO Combining tags onto 1 page . . .
-ECHO Cleaning up . . .
-ECHO Luggage Tag Rearrangement Complete!
+ECHO %TitleStr%
 ECHO.
-Choose32 -l -n -p "Would you like to display the combined document [Y or N]? "
-IF Errorlevel 2 (
-	CLS	
-	GOTO ReDO
-	)
+ECHO Close this window to exit.
 ECHO.
+wait 1.0
+Wbusy "Rearranging Luggage Tags" /stop
+
+Wbox "Rearranging Luggage Tags" "Luggage Tag Rearrangement Complete.^ ^Would you like to display the combined document?" "Yes;No" /WW=320 /DB=1 /OT /AL
+IF Errorlevel 2 (GOTO ReDO)
+IF Errorlevel 1 (GOTO OpenPDF)
+IF Errorlevel 0 (GOTO ReDO)
+
+:OpenPDF
+Wbox "Opening combined document..." ^
+ "Press ''Open'' to open the combined PDF. When you are done, close your PDF reader to continue." "Open" /WW=320 /DB=1 /OT /AL
+
 ECHO Close your PDF reader to continue . . .
 %OutPath%
 
 
 :ReDo
 CLS
-ECHO What would you like to do?
-ECHO [1] Create new tags (start over)
-ECHO [2] Modify current tags
-ECHO [3] Additional PDF tools
-ECHO [4] Exit
-Choose32 -l -n -c 1234 -p "[Press 1, 2, 3 or 4] "
-CLS
+ECHO %TitleStr%
+ECHO.
+ECHO Close this window to exit.
+ECHO.
+Wbox "%TitleStr%" ^
+ "" ^
+ "Start Over;Modify Current Tags;Additional PDF Tools;Exit" ^
+  /WW=640 /BW=125 /DB=1 /OT /AL
 IF Errorlevel 4 GOTO End
 IF Errorlevel 3 GOTO Utils
-ECHO To replace the PDF document you just created, use the same output file name.
-ECHO To create an additional PDF document, use a different output file name.
-ECHO.
-IF Errorlevel 2 GOTO AskAgain
-IF Errorlevel 1 GOTO Init
-ECHO ERROR!
-PAUSE
+IF Errorlevel 2 (
+	Wbox "Returning to beginning..." ^
+ "To replace the PDF document you just created, use the same output file name in the following steps.^ ^To create an additional PDF document, use a different output file name." OK /WW=320 /DB=1 /OT /AL
+	GOTO AskAgain
+)
+IF Errorlevel 1 (
+	Wbox "Returning to beginning..." ^
+ "To replace the PDF document you just created, use the same output file name in the following steps.^ ^To create an additional PDF document, use a different output file name." OK /WW=320 /DB=1 /OT /AL
+	GOTO Init
+)
+GOTO Init
 GOTO End
 
 
 :RepOut
-Choose32 -l -n -p "File exists. Overwrite existing document [Y or N]? "
+Wbox "File Exists" "A file with that name already exists.^ ^Would you like to overwrite it?" "Yes;No" /WW=320 /DB=1 /OT /AL
 IF Errorlevel 2 (GOTO OutAgain)
 GOTO BackRepOut
 
+REM ==============================================================================
 
 :Utils
-ECHO ==============================================================================
+CLS
+ECHO %TitleStr%
+ECHO.
 ECHO                      Additional PDF Processing Utilities                     
-ECHO ==============================================================================
+ECHO.
+ECHO Close this window to exit.
 ECHO.
 
-IF NOT DEFINED OutPath (
-	ECHO On the next screen you will select a PDF file to edit.
-	ECHO.
-	PAUSE
-	GOTO InFile
-)
-
-ECHO Is %OutPath%
-Choose32 -l -n -p "the PDF file you want to edit [Press Y or N]? "
-IF NOT Errorlevel 2 (GOTO Menu)
+IF NOT DEFINED OutPath (GOTO InFile)
+FOR %%F in (%OutPath%) do set OutPathNQ=%%~F
+Wbox "Additional PDF Processing Utilities" "Is %OutPathNQ% the PDF file you want to edit" "Yes;No" /WW=320 /DB=1 /OT /AL
+IF Errorlevel 2 (GOTO InFile)
+IF Errorlevel 1 (GOTO Menu)
 
 
 :InFile
-FOR /f "delims=" %%a in ('Wfile.exe "SET OutPath=" ".\*.pdf" "Open"') do %%a
+Wbox "Choose an Input PDF" ^
+ "Press ''Open...'' to choose the PDF file that you want to edit." "Open..." /WW=350 /DB=1 /OT /AL
+ECHO Opening File . . .
+Wfile "SET OutPath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
+IF Errorlevel 1 (GOTO CancelUtilPick)
+CALL temp.bat
+ECHO %FilePath%
+GOTO Menu
+
+
+:CancelUtilPick
+IF NOT DEFINED OutPath (GOTO Start)
+GOTO ReDo
 
 
 :Menu
-FOR %%F in (%OutPath%) do set OutName=%%~nF%%~xF
 CLS
-ECHO Editing %OutPath%
+ECHO %TitleStr%
 ECHO.
-ECHO All outputs from the following utilities will be saved in
-ECHO %~dp0
+ECHO                      Additional PDF Processing Utilities                     
 ECHO.
-ECHO Choose a PDF Processing option:
-ECHO [1] Add a 1/4 inch margin to the top and bottom of %OutName%
-ECHO [2] Produce a 2-page PDF from %OutName%
-ECHO [3] Convert %OutName% to a PNG image
-ECHO [4] Extract a single page from %OutName%
-ECHO [5] Choose a new input file
-ECHO [6] Return to main menu
-Choose32 -l -n -c 123456 -p "[Press 1, 2, 3, 4, 5, or 6] "
+ECHO Close this window to exit.
 ECHO.
-IF Errorlevel 6 GOTO ReDo
-IF Errorlevel 5 GOTO InFile
-IF Errorlevel 4 GOTO Extract
-IF Errorlevel 3 GOTO MakePNG
-IF Errorlevel 2 GOTO TwoPage
+FOR %%F in (%OutPath%) do set OutName=%%~nF%%~xF
+FOR %%F in (%OutPath%) do set OutPathNQ=%%~F
+FOR %%F in (%OutPath%) do set OutPathOnly=%%~dF%%~pF
+
+Wbox "Choose a PDF Processing option:" ^
+ "Editing %OutPathNQ%^ ^All outputs from the following utilities will be saved in:^%OutPathOnly%^ ^Click on the tool you want to use on the next screen." OK /WW=640 /DB=1 /OT /AL
+
+:Menu2
+ECHO Add a 1/4 inch margin to the top and bottom of %OutName% > temp.bat
+ECHO. >> temp.bat
+ECHO Produce a 2-page PDF from %OutName% >> temp.bat
+ECHO. >> temp.bat
+ECHO Convert %OutName% to a PNG image >> temp.bat
+ECHO. >> temp.bat
+ECHO Extract a single page from %OutName% >> temp.bat
+ECHO. >> temp.bat
+ECHO Choose a new input file >> temp.bat
+ECHO. >> temp.bat
+ECHO Return to main menu >> temp.bat
+Wselect temp.bat "Choose a PDF Processing option:" /menu /cmdCenter /ontop /grid
+ECHO.
+IF Errorlevel 11 GOTO ReDo
+IF Errorlevel 9 GOTO InFile
+IF Errorlevel 7 GOTO Extract
+IF Errorlevel 5 GOTO MakePNG
+IF Errorlevel 3 GOTO TwoPage
 IF Errorlevel 1 GOTO Margin
-ECHO ERROR
-PAUSE
-GOTO End
+GOTO ReDo
 
 
 :Margin
-gswin32c -q -dBATCH -dNOPAUSE -o "pad%OutName%" -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dDEVICEHEIGHTPOINTS=792 -dFIXEDMEDIA -c "<</Install {13.77 17.82 translate .955 .955 scale } bind >> setpagedevice" -f %OutPath%
-ECHO.
-ECHO File pad%OutName% created!
-ECHO.
-PAUSE
-GOTO Menu
+gswin32c -q -dBATCH -dNOPAUSE -o "%OutPathOnly%margin%OutName%" -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dDEVICEHEIGHTPOINTS=792 -dFIXEDMEDIA -c "<</Install {13.77 17.82 translate .955 .955 scale } bind >> setpagedevice" -f %OutPath%
+Wbox "Additional PDF Processing Utilities" "%OutPathOnly%margin%OutName% created from %OutName%." OK /WW=640 /DB=1 /OT /AL
+GOTO Menu2
 
 
 :TwoPage
-gswin32c -q -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -o "2x%OutName%" %OutPath% %OutPath%
-ECHO.
-ECHO File 2x%OutName% created!
-ECHO.
-PAUSE
-GOTO Menu
+gswin32c -q -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -o "%OutPathOnly%2x%OutName%" %OutPath% %OutPath%
+Wbox "Additional PDF Processing Utilities" "2-page PDF %OutPathOnly%2x%OutName% created from from %OutName%." OK /WW=640 /DB=1 /OT /AL
+GOTO Menu2
 
 
 :MakePNG
 SET Dpi=300
-SET /p Dpi=Enter PNG resolution in DPI [Leave blank for %Dpi%]: %=%
-gswin32c -dBATCH -dNOPAUSE -sDEVICE=png16m -sOutputFile="%OutName%.png" -dGraphicsAlphaBits=4 -dTextAlphaBits=4 -r720 -q %OutPath% -c quit
-ECHO.
-ECHO File %OutName%.png created at %Dpi% DPI!
-ECHO.
-PAUSE
-GOTO Menu
+
+winput "Additional PDF Processing Utilities" "SET Dpi=$input" ^
+ "Enter PNG resolution in DPI:" "%Dpi%" /num > temp.bat
+IF ERRORLEVEL 1 GOTO Menu2
+CALL temp.bat
+
+START Wbusy "Additional PDF Processing Utilities" "Creating PNG Image..." /marquee
+gswin32c -dBATCH -dNOPAUSE -sDEVICE=png16m -sOutputFile="%OutPathOnly%%OutName%.png" -dGraphicsAlphaBits=4 -dTextAlphaBits=4 -r720 -q %OutPath% -c quit
+Wbusy "Additional PDF Processing Utilities" /stop
+Wbox "Additional PDF Processing Utilities" "%Dpi% DPI PNG image %OutPathOnly%2x%OutName% created from from %OutName%." OK /WW=640 /DB=1 /OT /AL
+GOTO Menu2
 
 
 :Extract
-SET /p TagPage=What page would you like to extract from %OutFile%? %=%
-gswin32c -q -dBATCH -dNOPAUSE -o "pg%TagPage%_%OutName%" -sDEVICE=pdfwrite -dFirstPage=%TagPage% -dLastPage=%TagPage% %OutPath%
-ECHO.
-ECHO File pg%TagPage%_%OutName% created from page %TagPage% of %OutName%!
-ECHO.
-PAUSE
-GOTO Menu
+SET TagPage=
+winput "Additional PDF Processing Utilities" "SET Dpi=$input" ^
+ "What page would you like to extract from %OutName%?" "" /num > temp.bat
+IF ERRORLEVEL 1 GOTO Menu2
+CALL temp.bat
+
+IF NOT DEFINED TagPage (GOTO Menu)
+gswin32c -q -dBATCH -dNOPAUSE -o "%OutPathOnly%pg%TagPage%_%OutName%" -sDEVICE=pdfwrite -dFirstPage=%TagPage% -dLastPage=%TagPage% %OutPath%
+Wbox "Additional PDF Processing Utilities" "File pg%TagPage%_%OutName% created from page %TagPage% of %OutName%." OK /WW=640 /DB=1 /OT /AL
+GOTO Menu2
 
 
 :End
+del temp.bat

@@ -1,0 +1,14 @@
+Wbox - Ver. 1.10 - Message box for batch - (c) 2011-2012, Horst Schaeffer
+-------------------------------------------------------------------------
+
+http://www.horstmuc.de/w32dial.htm
+
+Disclaimer:
+
+This program is freeware (c) Horst Schaeffer. No warranty, no liability of any kind.
+PureBasic Source: http://www.horstmuc.de/source/wbox110.zip
+
+mailto:horst.schaeffer@gmx.net
+http://www.horstmuc.de/
+
+14 Aug 2012
