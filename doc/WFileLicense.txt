@@ -1,5 +1,10 @@
-Wfile - Batch Tool Ver. 1.31 (c) 2008-2011, Horst Schaeffer
------------------------------------------------------------
+Wfile - Batch Tool Ver. 1.4 (c) 2008-2013, Horst Schaeffer
+----------------------------------------------------------
+
+The Wfile package includes two programs: 
+
++       "FileToOpen"      used for source files
++       "FileToSave"      used for target files
 
 http://www.horstmuc.de/w32dial.htm
 
@@ -8,9 +13,9 @@ Disclaimer:
 This program is freeware (c) Horst Schaeffer. No warranty, no liability 
 of any kind.
 
-Source:   http://www.horstmuc.de/source/wfile131.zip 
+Source:   http://www.horstmuc.de/source/wfile14.zip 
 
 mailto:horst.schaeffer@gmx.net
 http://www.horstmuc.de/
 
-24 Mar 2011
+10 Jan 2013

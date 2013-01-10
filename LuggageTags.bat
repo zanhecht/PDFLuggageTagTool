@@ -9,7 +9,7 @@ SET Size1=12
 SET Size2=12
 SET Size3=12
 SET Size4=12
-SET OutName=
+SET OutName=RCL4Tags.pdf
 Set TitleStr=Royal Caribbean Luggage Tag Rearranger Version 1.2 Created 01/07/2013 by ahecht
 
 
@@ -37,14 +37,14 @@ SET Size1=12
 SET Size2=12
 SET Size3=12
 SET Size4=12
-SET OutName=
+SET OutName=RCL4Tags.pdf
 
 
 :ChooseDocs
 Wbox "Select your Cruise Documents PDF file..." ^
  "Your cruise documents are a long PDF file with ''GUEST TICKET BOOKLET'' on the first page. You can get this file from RoyalCaribbean.com or your travel agent 40-45 days before your cruise.^ ^Hit the ''Open...'' button below and select your cruise documents PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
 ECHO Opening File . . .
-Wfile "SET FilePath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
+FileToOpen "SET FilePath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
 IF Errorlevel 1 (GOTO End)
 CALL temp.bat
 ECHO %FilePath%
@@ -152,7 +152,7 @@ IF NOT DEFINED Name1 (
 Wbox "Save As..." ^
  "A new PDF file will be created with four luggage tags on a single page.^ ^Click on ''Save As...'' below to choose a name and location for this new PDF file. It should be different from the name of your cruise documents." "Save As..." /WW=320 /DB=1 /OT /AL
 
-Wfile "SET OutPath=" "%~dp0*.pdf" "Save As..." /maynotexist > temp.bat
+FileToSave "SET OutPath=" "%~dp0*.pdf" "Save As..." "%OutName%" /overwritePrompt > temp.bat
 IF Errorlevel 1 (GOTO ReDO)
 CALL temp.bat
 
@@ -161,11 +161,6 @@ FOR %%F in (%OutPath%) do set OutName=%%~nF%%~xF
 FOR %%F in (%OutPath%) do set OutPathOnly=%%~dF%%~pF
 IF /I NOT "%OutExt%"==".pdf" (SET OutName=%OutName%.pdf)
 SET OutPath="%OutPathOnly%%OutName%"
-
-IF EXIST %OutPath% GOTO RepOut
-
-
-:BackRepOut
 
 IF DEFINED Name1 (
 	Set ConfNames=Names: %Name1%, %Name2%, %Name3%, and %Name4%; ;Font Sizes: %Size1%, %Size2%, %Size3%, and %Size4%.
@@ -286,13 +281,7 @@ IF Errorlevel 1 (
 	GOTO Init
 )
 GOTO Init
-GOTO End
 
-
-:RepOut
-Wbox "File Exists" "A file with that name already exists.^ ^Would you like to overwrite it?" "Yes;No" /WW=320 /DB=1 /OT /AL
-IF Errorlevel 2 (GOTO OutAgain)
-GOTO BackRepOut
 
 REM ==============================================================================
 
@@ -316,7 +305,7 @@ IF Errorlevel 1 (GOTO Menu)
 Wbox "Choose an Input PDF" ^
  "Press ''Open...'' to choose the PDF file that you want to edit." "Open..." /WW=350 /DB=1 /OT /AL
 ECHO Opening File . . .
-Wfile "SET OutPath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
+FileToOpen "SET OutPath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
 IF Errorlevel 1 (GOTO CancelUtilPick)
 CALL temp.bat
 ECHO %FilePath%
