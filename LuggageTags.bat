@@ -10,7 +10,7 @@ SET Size2=12
 SET Size3=12
 SET Size4=12
 SET OutName=RCL4Tags.pdf
-Set TitleStr=Royal Caribbean Luggage Tag Rearranger Version 1.2 Created 01/07/2013 by ahecht
+Set TitleStr=Royal Caribbean Luggage Tag Rearranger Version 1.4 Created 01/16/2013 by ahecht
 
 
 :Start
@@ -19,6 +19,7 @@ ECHO %TitleStr%
 ECHO.
 ECHO Close this window to exit.
 ECHO.
+del /F /Q *.tmp 
 Wbox "%TitleStr%" ^
  "This script will extract the luggage tags from your Royal Caribbean cruise documents and place four of them on a single page for easy printing. It can also insert names onto the luggage tags.^^This script and its constituant programs are distributed under the GPL or similar open licenses. Please see the doc folder for more information.^^This program is in no way affiliated with nor endorsed by Royal Caribbean International or Royal Caribbean Cruises Ltd." ^
  "Create PDF with 4 tags on one page;Additional PDF tools;Exit" ^
@@ -235,8 +236,8 @@ pdftk tag3.tmp stamp tagstamp.tmp output output.tmp
 
 START Wbusy "Rearranging Luggage Tags" "Cleaning up..." /marquee
 move /Y output.tmp %OutPath%
-del *.tmp
-del temp.bat
+del /F /Q *.tmp
+del /F /Q temp.bat
 CLS
 ECHO %TitleStr%
 ECHO.
@@ -396,4 +397,5 @@ GOTO Menu2
 
 
 :End
-del temp.bat
+del /F /Q *.tmp
+del /F /Q temp.bat
