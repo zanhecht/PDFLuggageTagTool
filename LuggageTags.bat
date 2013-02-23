@@ -10,7 +10,7 @@ SET Size2=12
 SET Size3=12
 SET Size4=12
 SET OutName=RCL4Tags.pdf
-Set TitleStr=Royal Caribbean Luggage Tag Tool Version 2.0 Created 01/19/2013 by ahecht
+Set TitleStr=Royal Caribbean Luggage Tag Tool Version 2.1 Created 02/23/2013 by ahecht
 
 
 :Start
@@ -25,7 +25,7 @@ Wbox "%TitleStr%" ^
  "Create page with 4 tags;Add names to single tags;Additional PDF tools;Exit" ^
   /WW=640 /BW=150 /DB=1 /OT /AL
 IF Errorlevel 4 GOTO End
-IF Errorlevel 3 GOTO Utils
+IF Errorlevel 3 GOTO Menu
 IF Errorlevel 2 GOTO NameTags
 IF Errorlevel 1 GOTO ChooseDocs
 GOTO End
@@ -44,7 +44,7 @@ SET OutName=RCL4Tags.pdf
 
 :ChooseDocs
 Wbox "Select your Cruise Documents PDF file..." ^
- "Your cruise documents are a long PDF file with ''GUEST TICKET BOOKLET'' on the first page. You can get this file from RoyalCaribbean.com or your travel agent 40-45 days before your cruise.^ ^Hit the ''Open...'' button below and select your cruise documents PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
+ "Your cruise documents are a long PDF file with ''GUEST TICKET BOOKLET'' on the first page. You can get this file from www.royalcaribbean.com/edocs or your travel agent 40-45 days before your cruise.^ ^Hit the ''Open...'' button below and select your cruise documents PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
 ECHO Opening File . . .
 FileToOpen "SET FilePath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
 IF Errorlevel 1 (GOTO End)
@@ -270,38 +270,6 @@ GOTO End
 
 REM ==============================================================================
 
-:Utils
-CLS
-ECHO %TitleStr%
-ECHO.
-ECHO                      Additional PDF Processing Utilities                     
-ECHO.
-ECHO Close this window to exit.
-ECHO.
-
-IF NOT DEFINED OutPath (GOTO InFile)
-FOR %%F in (%OutPath%) do set OutPathNQ=%%~F
-Wbox "Additional PDF Processing Utilities" "Is %OutPathNQ% the PDF file you want to edit" "Yes;No" /WW=320 /DB=1 /OT /AL
-IF Errorlevel 2 (GOTO InFile)
-IF Errorlevel 1 (GOTO Menu)
-
-
-:InFile
-Wbox "Choose an Input PDF" ^
- "Press ''Open...'' to choose the PDF file that you want to edit." "Open..." /WW=350 /DB=1 /OT /AL
-ECHO Opening File . . .
-FileToOpen "SET OutPath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
-IF Errorlevel 1 (GOTO CancelUtilPick)
-CALL temp.bat
-ECHO %FilePath%
-GOTO Menu
-
-
-:CancelUtilPick
-IF NOT DEFINED OutPath (GOTO Start)
-GOTO ReDo
-
-
 :Menu
 CLS
 ECHO %TitleStr%
@@ -310,46 +278,51 @@ ECHO                      Additional PDF Processing Utilities
 ECHO.
 ECHO Close this window to exit.
 ECHO.
+ECHO Add a 1/4 inch margin to the top and bottom of PDF > temp.bat
+ECHO. >> temp.bat
+ECHO Produce a 2-page PDF from a single-page PDF >> temp.bat
+ECHO. >> temp.bat
+ECHO Convert first page of PDF to a PNG image >> temp.bat
+ECHO. >> temp.bat
+ECHO Extract a single page from PDF >> temp.bat
+ECHO. >> temp.bat
+ECHO Return to main menu >> temp.bat
+Wselect temp.bat "Choose a PDF Processing option:" /menu /cmdCenter /ontop /grid
+SET UtilMenu=%ERRORLEVEL%
+ECHO.
+
+IF !UtilMenu!==9 GOTO Start
+IF !UtilMenu!==0 GOTO Start
+
+Wbox "Choose an Input PDF" ^
+ "Press ''Open...'' to choose the PDF file that you want to edit." "Open..." /WW=350 /DB=1 /OT /AL
+ECHO Opening File . . .
+FileToOpen "SET OutPath=" ".\*.pdf" "Select PDF file to edit..." > temp.bat
+IF Errorlevel 1 (GOTO CancelUtilPick)
+CALL temp.bat
+ECHO %OutPath%
 FOR %%F in (%OutPath%) do set OutName=%%~nF%%~xF
 FOR %%F in (%OutPath%) do set OutPathNQ=%%~F
 FOR %%F in (%OutPath%) do set OutPathOnly=%%~dF%%~pF
 
-Wbox "Choose a PDF Processing option:" ^
- "Editing %OutPathNQ%^ ^All outputs from the following utilities will be saved in:^%OutPathOnly%^ ^Click on the tool you want to use on the next screen." OK /WW=640 /DB=1 /OT /AL
 
-:Menu2
-ECHO Add a 1/4 inch margin to the top and bottom of %OutName% > temp.bat
-ECHO. >> temp.bat
-ECHO Produce a 2-page PDF from %OutName% >> temp.bat
-ECHO. >> temp.bat
-ECHO Convert %OutName% to a PNG image >> temp.bat
-ECHO. >> temp.bat
-ECHO Extract a single page from %OutName% >> temp.bat
-ECHO. >> temp.bat
-ECHO Choose a new input file >> temp.bat
-ECHO. >> temp.bat
-ECHO Return to main menu >> temp.bat
-Wselect temp.bat "Choose a PDF Processing option:" /menu /cmdCenter /ontop /grid
-ECHO.
-IF Errorlevel 11 GOTO ReDo
-IF Errorlevel 9 GOTO InFile
-IF Errorlevel 7 GOTO Extract
-IF Errorlevel 5 GOTO MakePNG
-IF Errorlevel 3 GOTO TwoPage
-IF Errorlevel 1 GOTO Margin
-GOTO ReDo
+IF !UtilMenu!==7 GOTO Extract
+IF !UtilMenu!==5 GOTO MakePNG
+IF !UtilMenu!==3 GOTO TwoPage
+IF !UtilMenu!==1 GOTO Margin
+GOTO Menu
 
 
 :Margin
 gswin32c -q -dBATCH -dNOPAUSE -o "%OutPathOnly%margin%OutName%" -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dDEVICEHEIGHTPOINTS=792 -dFIXEDMEDIA -c "<</Install {13.77 17.82 translate .955 .955 scale } bind >> setpagedevice" -f %OutPath%
 Wbox "Additional PDF Processing Utilities" "%OutPathOnly%margin%OutName% created from %OutName%." OK /WW=640 /DB=1 /OT /AL
-GOTO Menu2
+GOTO Menu
 
 
 :TwoPage
 gswin32c -q -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -o "%OutPathOnly%2x%OutName%" %OutPath% %OutPath%
 Wbox "Additional PDF Processing Utilities" "2-page PDF %OutPathOnly%2x%OutName% created from from %OutName%." OK /WW=640 /DB=1 /OT /AL
-GOTO Menu2
+GOTO Menu
 
 
 :MakePNG
@@ -357,29 +330,27 @@ SET Dpi=300
 
 winput "Additional PDF Processing Utilities" "SET Dpi=$input" ^
  "Enter PNG resolution in DPI:" "%Dpi%" > temp.bat
-IF ERRORLEVEL 1 GOTO Menu2
+IF ERRORLEVEL 1 GOTO Menu
 CALL temp.bat
 
 START Wbusy "Additional PDF Processing Utilities" "Creating PNG Image..." /marquee
 gswin32c -dBATCH -dNOPAUSE -sDEVICE=png16m -sOutputFile="%OutPathOnly%%OutName%.png" -dGraphicsAlphaBits=4 -dTextAlphaBits=4 -r%Dpi% -q %OutPath% -c quit
 Wbusy "Additional PDF Processing Utilities" /stop
 Wbox "Additional PDF Processing Utilities" "%Dpi% DPI PNG image %OutPathOnly%2x%OutName% created from from %OutName%." OK /WW=640 /DB=1 /OT /AL
-GOTO Menu2
+GOTO Menu
 
 
 :Extract
 SET TagPage=
 winput "Additional PDF Processing Utilities" "SET TagPage=$input" ^
  "What page would you like to extract from %OutName%?" "%TagPage%" /num > temp.bat
-IF ERRORLEVEL 1 GOTO Menu2
+IF ERRORLEVEL 1 GOTO Menu
 CALL temp.bat
 
 IF NOT DEFINED TagPage (GOTO Menu)
 gswin32c -q -dBATCH -dNOPAUSE -o "%OutPathOnly%pg%TagPage%_%OutName%" -sDEVICE=pdfwrite -dFirstPage=%TagPage% -dLastPage=%TagPage% %OutPath%
 Wbox "Additional PDF Processing Utilities" "File pg%TagPage%_%OutName% created from page %TagPage% of %OutName%." OK /WW=640 /DB=1 /OT /AL
-GOTO Menu2
-
-GOTO Utils
+GOTO Menu
 
 
 REM ==============================================================================
