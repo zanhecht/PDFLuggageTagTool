@@ -10,7 +10,7 @@ SET Size2=12
 SET Size3=12
 SET Size4=12
 SET OutName=RCL4Tags.pdf
-Set TitleStr=Royal Caribbean Luggage Tag Tool Version 2.1 Created 02/23/2013 by ahecht
+Set TitleStr=Royal Caribbean Luggage Tag Tool Version 2.2 Created 03/03/2013 by ahecht
 
 
 :Start

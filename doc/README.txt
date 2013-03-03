@@ -1,5 +1,5 @@
 ===============================================================
-Royal Caribbean Luggage Tag Tool 2.1
+Royal Caribbean Luggage Tag Tool 2.2
 http://www3.zansstuff.com/luggage-tags
 ===============================================================
 
@@ -11,9 +11,9 @@ Functions
 
 Tag Rearranger
 =====================
-Many people, uncomfortable with the durability or hassle of taped and stapled luggage tags began cutting out the tags instead of folding, and either laminating them, sandwiching them in clear packing tape, or inserting them into vinyl bookmark holders or vinyl cruise tag holders from places like Favors By Serendipity or the Cruise Critic Cruise Store.
+Many people, uncomfortable with the durability or hassle of taped and stapled luggage tags began cutting out the tags instead of folding, and either laminating them, sandwiching them in clear packing tape, or inserting them into vinyl bookmark holders or vinyl cruise tag holders from places like Favors By Serendipity or the Cruise Critic Cruise Store.Others would print them on full-sheet ink-jet or laser printer labels.
 
-If the tags are going to be cut out, wasting an entire piece of paper for each tag seemed like a waste. Therefore, the Tag Rearranger will extract the luggage tags from the Cruise Documents PDF and create a new PDF that has four tags on a single page. It also gives you the option of inserting a name into the "Guest Name" area of the tag so that you don't have to write it in by hand.
+If the tags are going to be cut out, using an entire piece of paper (or an entire full-sheet label) for each tag seemed like a waste. Therefore, the Tag Rearranger will extract the luggage tags from the Cruise Documents PDF and create a new PDF that has four tags on a single page. It also gives you the option of inserting a name into the "Guest Name" area of the tag so that you don't have to write it in by hand.
 
 Tag Labeler
 =====================
@@ -60,3 +60,4 @@ Version History
 1.4: Bug fixes
 2.0: Added ability to just add name to tags without rearranging. Misc bug fixes.
 2.1: Improved workflow of PDF utilities. Misc bug fixes.
+2.2: Removed unnecessary files from installation.
