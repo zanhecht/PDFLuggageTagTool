@@ -10,7 +10,7 @@ SET Size2=12
 SET Size3=12
 SET Size4=12
 SET OutName=RCL4Tags.pdf
-Set TitleStr=Royal Caribbean Luggage Tag Tool Version 2.2 Created 03/03/2013 by ahecht
+Set TitleStr=PDF Luggage Tag Tool Version 2.3 Created 04/10/2013 by ahecht
 
 
 :Start
@@ -21,7 +21,7 @@ ECHO Close this window to exit.
 ECHO.
 del /F /Q *.tmp 2>NUL
 Wbox "%TitleStr%" ^
- "This script will extract the luggage tags from your Royal Caribbean cruise documents. It can place four of them on a single page for easy printing, insert names onto the tags, and perform a variety of other functions.^^This script and its constituant programs are distributed under the GPL or similar open licenses. Please see the doc folder for more information.^^This program is in no way affiliated with nor endorsed by Royal Caribbean International or Royal Caribbean Cruises Ltd." ^
+ "This script will extract the luggage tags from your Royal Caribbean cruise documents. It can place four of them on a single page for easy printing, insert names onto the tags, and perform a variety of other functions.^^This script and its constituent programs are distributed under the GPL or similar open licenses. Please see the doc folder for more information.^^This program is in no way affiliated with nor endorsed by Royal Caribbean International or Royal Caribbean Cruises Ltd." ^
  "Create page with 4 tags;Add names to single tags;Additional PDF tools;Exit" ^
   /WW=640 /BW=150 /DB=1 /OT /AL
 IF Errorlevel 4 GOTO End

@@ -1,5 +1,5 @@
 ===============================================================
-Royal Caribbean Luggage Tag Tool 2.2
+PDF Luggage Tag Tool 2.3
 http://www3.zansstuff.com/luggage-tags
 ===============================================================
 
