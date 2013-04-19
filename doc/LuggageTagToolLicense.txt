@@ -1,7 +1,0 @@
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License (GPL) as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-The constituant programs included herein are distributed under the GPL or similar open licenses. Please see the included doc folder for more information.
-
-This program is in no way affiliated with nor endorsed by Royal Caribbean International or Royal Caribbean Cruises Ltd.

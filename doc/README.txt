@@ -1,5 +1,5 @@
 ===============================================================
-PDF Luggage Tag Tool 2.3
+PDF Luggage Tag Tool 2.4
 http://www3.zansstuff.com/luggage-tags
 ===============================================================
 
@@ -61,3 +61,5 @@ Version History
 2.0: Added ability to just add name to tags without rearranging. Misc bug fixes.
 2.1: Improved workflow of PDF utilities. Misc bug fixes.
 2.2: Removed unnecessary files from installation.
+2.3: Renamed to PDF Luggage Tag Tool.
+2.4: Changed default output file names.

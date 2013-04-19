@@ -10,7 +10,7 @@ SET Size2=12
 SET Size3=12
 SET Size4=12
 SET OutName=RCL4Tags.pdf
-Set TitleStr=PDF Luggage Tag Tool Version 2.3 Created 04/10/2013 by ahecht
+Set TitleStr=PDF Luggage Tag Tool Version 2.4 Created 04/19/2013 by ahecht
 
 
 :Start
@@ -39,7 +39,7 @@ SET Size1=12
 SET Size2=12
 SET Size3=12
 SET Size4=12
-SET OutName=RCL4Tags.pdf
+SET OutName=RCL_Tags.pdf
 
 
 :ChooseDocs
@@ -51,6 +51,7 @@ IF Errorlevel 1 (GOTO End)
 CALL temp.bat
 REM ECHO %FilePath%
 FOR %%F in (%FilePath%) do set FileName=%%~nF%%~xF
+FOR %%F in (%FilePath%) do set OutName=%%~nF_Tags%%~xF
 
 winput "Page Number" "SET TagPage=$input" ^
  "What page of %FileName% are your luggage tags on?^ ^You can determine this by opening the cruise documents in Adobe Reader or other PDF software." ^
@@ -62,7 +63,7 @@ GOTO Choices
 
 :AskAgain
 FOR %%F in (%FilePath%) do set FilePathNQ=%%~F
-Wbox "Select your Cruise Documents PDF file..." ^
+Wbox "Confirm Page Number..." ^
  "Are your luggage tags on page %TagPage% of ''%FilePathNQ%''?" "Yes;No" /WW=320 /DB=1 /OT /AL
 IF Errorlevel 2 (GOTO ChooseDocs)
 
@@ -250,7 +251,7 @@ ECHO.
 ECHO Close this window to exit.
 ECHO.
 Wbox "%TitleStr%" ^
- "" ^
+ "Would you like to start the 4-tag tool from the beginning, modify your current tags, return to the main menu, or exit?" ^
  "Start Over;Modify Current Tags;Main Menu;Exit" ^
   /WW=640 /BW=125 /DB=1 /OT /AL
 IF Errorlevel 4 GOTO End
@@ -302,6 +303,8 @@ IF Errorlevel 1 (GOTO CancelUtilPick)
 CALL temp.bat
 ECHO %OutPath%
 FOR %%F in (%OutPath%) do set OutName=%%~nF%%~xF
+FOR %%F in (%OutPath%) do set OutNameNoExt=%%~nF
+FOR %%F in (%OutPath%) do set OutNameExt=%%~xF
 FOR %%F in (%OutPath%) do set OutPathNQ=%%~F
 FOR %%F in (%OutPath%) do set OutPathOnly=%%~dF%%~pF
 
@@ -314,14 +317,14 @@ GOTO Menu
 
 
 :Margin
-gswin32c -q -dBATCH -dNOPAUSE -o "%OutPathOnly%margin%OutName%" -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dDEVICEHEIGHTPOINTS=792 -dFIXEDMEDIA -c "<</Install {13.77 17.82 translate .955 .955 scale } bind >> setpagedevice" -f %OutPath%
-Wbox "Additional PDF Processing Utilities" "%OutPathOnly%margin%OutName% created from %OutName%." OK /WW=640 /DB=1 /OT /AL
+gswin32c -q -dBATCH -dNOPAUSE -o "%OutPathOnly%%OutNameNoExt%_margin%OutNameExt%" -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dDEVICEHEIGHTPOINTS=792 -dFIXEDMEDIA -c "<</Install {13.77 17.82 translate .955 .955 scale } bind >> setpagedevice" -f %OutPath%
+Wbox "Additional PDF Processing Utilities" "%OutPathOnly%%OutNameNoExt%_margin%OutNameExt% created from %OutName%." OK /WW=640 /DB=1 /OT /AL
 GOTO Menu
 
 
 :TwoPage
-gswin32c -q -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -o "%OutPathOnly%2x%OutName%" %OutPath% %OutPath%
-Wbox "Additional PDF Processing Utilities" "2-page PDF %OutPathOnly%2x%OutName% created from from %OutName%." OK /WW=640 /DB=1 /OT /AL
+gswin32c -q -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -o "%OutPathOnly%%OutNameNoExt%_2x%OutNameExt%" %OutPath% %OutPath%
+Wbox "Additional PDF Processing Utilities" "2-page PDF %OutPathOnly%%OutNameNoExt%_2x%OutNameExt% created from from %OutName%." OK /WW=640 /DB=1 /OT /AL
 GOTO Menu
 
 
@@ -334,9 +337,9 @@ IF ERRORLEVEL 1 GOTO Menu
 CALL temp.bat
 
 START Wbusy "Additional PDF Processing Utilities" "Creating PNG Image..." /marquee
-gswin32c -dBATCH -dNOPAUSE -sDEVICE=png16m -sOutputFile="%OutPathOnly%%OutName%.png" -dGraphicsAlphaBits=4 -dTextAlphaBits=4 -r%Dpi% -q %OutPath% -c quit
+gswin32c -dBATCH -dNOPAUSE -sDEVICE=png16m -sOutputFile="%OutPathOnly%%OutNameNoExt%.png" -dGraphicsAlphaBits=4 -dTextAlphaBits=4 -r%Dpi% -q %OutPath% -c quit
 Wbusy "Additional PDF Processing Utilities" /stop
-Wbox "Additional PDF Processing Utilities" "%Dpi% DPI PNG image %OutPathOnly%2x%OutName% created from from %OutName%." OK /WW=640 /DB=1 /OT /AL
+Wbox "Additional PDF Processing Utilities" "%Dpi% DPI PNG image %OutPathOnly%%OutNameNoExt%.png created from from %OutName%." OK /WW=640 /DB=1 /OT /AL
 GOTO Menu
 
 
@@ -348,8 +351,8 @@ IF ERRORLEVEL 1 GOTO Menu
 CALL temp.bat
 
 IF NOT DEFINED TagPage (GOTO Menu)
-gswin32c -q -dBATCH -dNOPAUSE -o "%OutPathOnly%pg%TagPage%_%OutName%" -sDEVICE=pdfwrite -dFirstPage=%TagPage% -dLastPage=%TagPage% %OutPath%
-Wbox "Additional PDF Processing Utilities" "File pg%TagPage%_%OutName% created from page %TagPage% of %OutName%." OK /WW=640 /DB=1 /OT /AL
+gswin32c -q -dBATCH -dNOPAUSE -o "%OutPathOnly%%OutNameNoExt%_pg%TagPage%%OutNameExt%" -sDEVICE=pdfwrite -dFirstPage=%TagPage% -dLastPage=%TagPage% %OutPath%
+Wbox "Additional PDF Processing Utilities" "File %OutPathOnly%%OutNameNoExt%_pg%TagPage%%OutNameExt% created from page %TagPage% of %OutName%." OK /WW=640 /DB=1 /OT /AL
 GOTO Menu
 
 
