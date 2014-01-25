@@ -1,5 +1,5 @@
 ===============================================================
-PDF Luggage Tag Tool 2.4
+PDF Luggage Tag Tool 2.5
 http://www3.zansstuff.com/luggage-tags
 ===============================================================
 
@@ -29,9 +29,11 @@ Instructions
 
 Step 1
 =====================
-If you do not already have your cruise documents in PDF form, download them to your computer. The cruise documents are different from your SetSail pass, and are usually not available from the Royal Caribbean web site until 40-50 days before your cruise. The first page of the document should say "GUEST TICKET BOOKLET". If it says "SetSail" on the top, you do not have the correct document.
+If you do not already have your cruise documents or luggage tags in PDF form, download them to your computer.
 
-If you do not already have your cruise documents, you can get them from http://RoyalCaribbean.com/edocs
+The cruise documents are different from your SetSail pass, and are usually not available from the Royal Caribbean web site until 40-49 days before your cruise. The first page of the document should say "GUEST TICKET BOOKLET". If it says "SetSail" on the top, you do not have the correct document. If you do not already have your cruise documents, go to https://secure.royalcaribbean.com/edocs/displayBookingSelection.do and enter your information. If you're within 40-49 days of your cruise you should be able to download your Cruise Documents.
+
+The Luggage Tag PDF can be downloaded after completing online check-in at royalcaribbean.com if you're within 40-49 days before your cruise.  If you do not already have this document, go to https://secure.royalcaribbean.com/beforeyouboard/boardingDocuments.do and enter your information on the right of the page to begin. Once you have finished on-line check in, if you're within 40-49 days of your cruise, you should see a ''PRINT PAPER LUGGAGE TAG'' button. Click it to download your luggage tags.
 
 Step 2
 =====================
@@ -63,3 +65,4 @@ Version History
 2.2: Removed unnecessary files from installation.
 2.3: Renamed to PDF Luggage Tag Tool.
 2.4: Changed default output file names.
+2.5: Updated for new luggage tag PDFs and added download buttons

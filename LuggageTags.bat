@@ -4,13 +4,14 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 PATH=%PATH%;%~dp0\bin
 SET FileName=""
 SET TagPage=15
+SET TagsOrCD=CD
 SET Name1=
 SET Size1=12
 SET Size2=12
 SET Size3=12
 SET Size4=12
 SET OutName=RCL4Tags.pdf
-Set TitleStr=PDF Luggage Tag Tool Version 2.4 Created 04/19/2013 by ahecht
+SET TitleStr=PDF Luggage Tag Tool Version 2.5 Created 01/24/2014 by ahecht
 
 
 :Start
@@ -40,18 +41,47 @@ SET Size2=12
 SET Size3=12
 SET Size4=12
 SET OutName=RCL_Tags.pdf
+SET TagsOrCD=CD
 
 
 :ChooseDocs
-Wbox "Select your Cruise Documents PDF file..." ^
- "Your cruise documents are a long PDF file with ''GUEST TICKET BOOKLET'' on the first page. You can get this file from www.royalcaribbean.com/edocs or your travel agent 40-45 days before your cruise.^ ^Hit the ''Open...'' button below and select your cruise documents PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
+Wbox "%TitleStr%" ^
+ "Your luggage tags are either located in your Cruise Documents or in a Luggage Tags PDF file downloaded. Both will be available starting 40-49 days before your cruise.^ ^The Luggage Tag File can be downloaded by clicking the ''PRINT PAPER LUGGAGE TAG'' button after completing online checkin at royalcaribbean.com.^ ^Your cruise documents are a long PDF file with ''GUEST TICKET BOOKLET'' on the first page. You can get this file from www.royalcaribbean.com/edocs or your travel agent 40-45 days before your cruise." ^
+ "Open Cruise Documents PDF;Open Luggage Tag PDF;Download Cruise Documents;Download Luggage Tag PDF" ^
+  /WW=640 /BW=170 /DB=1 /OT /AL
+IF Errorlevel 4 GOTO DownloadLT
+IF Errorlevel 3 GOTO DownloadCD
+IF Errorlevel 2 GOTO OpenLT
+IF Errorlevel 1 GOTO OpenPDF
+GOTO Start
+
+:DownloadLT
+START "" "https://secure.royalcaribbean.com/beforeyouboard/boardingDocuments.do"
+Wbox "Complete Online Check-In" ^
+ "Your web browser should open to the Online Check-In Page. Enter your information on the right of the page to begin. Once you have finished on-line check in, if you're within 40-49 days of your cruise, you should see a ''PRINT PAPER LUGGAGE TAG'' button. Click it to download your luggage tags.^ ^When you have downloaded the file to your computer, hit the ''Open...'' button below and select your luggage tag PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
+GOTO OpenLT
+
+:DownloadCD
+START "" "https://secure.royalcaribbean.com/edocs/displayBookingSelection.do"
+Wbox "Download Cruise Documents" ^
+ "Your web browser should open to the Guest Vacation Documents Page. Enter your information, and if you're within 40-49 days of your cruise you should be able to download your Cruise Documents.^ ^When you have downloaded the file to your computer, hit the ''Open...'' button below and select your cruise documents PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
+GOTO OpenPDF
+
+:OpenLT
+SET TagPage=1
+SET TagsOrCD=TAGS
+
+:OpenPDF
 ECHO Opening File . . .
-FileToOpen "SET FilePath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
-IF Errorlevel 1 (GOTO End)
+FileToOpen "SET FilePath=" ".\*.pdf" "Select your Cruise Documents or Luggage Tag PDF file..." > temp.bat
+REM IF Errorlevel 1 (GOTO End)
+IF Errorlevel 1 ECHO EL1
 CALL temp.bat
 REM ECHO %FilePath%
 FOR %%F in (%FilePath%) do set FileName=%%~nF%%~xF
 FOR %%F in (%FilePath%) do set OutName=%%~nF_Tags%%~xF
+
+IF %TagsOrCD%==TAGS GOTO Choices
 
 winput "Page Number" "SET TagPage=$input" ^
  "What page of %FileName% are your luggage tags on?^ ^You can determine this by opening the cruise documents in Adobe Reader or other PDF software." ^
@@ -238,7 +268,7 @@ IF Errorlevel 0 (GOTO ReDo)
 
 :OpenPDF
 Wbox "Opening combined document..." ^
- "Press ''Open'' to open the combined PDF. When you are done, close your PDF reader to continue." "Open" /WW=320 /DB=1 /OT /AL
+ "Press ''Open'' to open the combined PDF. When you are done, close your PDF reader to continue." "Open..." /WW=320 /DB=1 /OT /AL
 
 ECHO Close your PDF reader to continue . . .
 %OutPath%
@@ -361,16 +391,42 @@ REM ============================================================================
 :NameTags
 IF Exist FilePath GOTO NTAskAgain
 
-
 :NTChooseDocs
-Wbox "Select your Cruise Documents PDF file..." ^
- "Your cruise documents are a long PDF file with ''GUEST TICKET BOOKLET'' on the first page. You can get this file from RoyalCaribbean.com or your travel agent 40-45 days before your cruise.^ ^Hit the ''Open...'' button below and select your cruise documents PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
+Wbox "%TitleStr%" ^
+ "Your luggage tags are either located in your Cruise Documents or in a Luggage Tags PDF file downloaded. Both will be available starting 40-49 days before your cruise.^ ^The Luggage Tag File can be downloaded by clicking the ''PRINT PAPER LUGGAGE TAG'' button after completing online checkin at royalcaribbean.com.^ ^Your cruise documents are a long PDF file with ''GUEST TICKET BOOKLET'' on the first page. You can get this file from www.royalcaribbean.com/edocs or your travel agent 40-45 days before your cruise." ^
+ "Open Cruise Documents PDF;Open Luggage Tag PDF;Download Cruise Documents;Download Luggage Tag PDF" ^
+  /WW=640 /BW=170 /DB=1 /OT /AL
+IF Errorlevel 4 GOTO NTDownloadLT
+IF Errorlevel 3 GOTO NTDownloadCD
+IF Errorlevel 2 GOTO NTOpenLT
+IF Errorlevel 1 GOTO NTOpenPDF
+GOTO Start
+
+:NTDownloadLT
+START "" "https://secure.royalcaribbean.com/beforeyouboard/boardingDocuments.do"
+Wbox "Complete Online Check-In" ^
+ "Your web browser should open to the Online Check-In Page. Enter your information on the right of the page to begin. Once you have finished on-line check in, if you're within 40-49 days of your cruise, you should see a ''PRINT PAPER LUGGAGE TAG'' button. Click it to download your luggage tags.^ ^When you have downloaded the file to your computer, hit the ''Open...'' button below and select your luggage tag PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
+GOTO NTOpenLT
+
+:NTDownloadCD
+START "" "https://secure.royalcaribbean.com/edocs/displayBookingSelection.do"
+Wbox "Download Cruise Documents" ^
+ "Your web browser should open to the Guest Vacation Documents Page. Enter your information, and if you're within 40-49 days of your cruise you should be able to download your Cruise Documents.^ ^When you have downloaded the file to your computer, hit the ''Open...'' button below and select your cruise documents PDF file. " "Open..." /WW=320 /DB=1 /OT /AL
+GOTO NTOpenPDF
+
+:NTOpenLT
+SET TagPage=1
+SET TagsOrCD=TAGS
+
+:NTOpenPDF
 ECHO Opening File . . .
-FileToOpen "SET FilePath=" ".\*.pdf" "Select your Cruise Documents PDF file..." > temp.bat
+FileToOpen "SET FilePath=" ".\*.pdf" "Select your Cruise Documents or Luggage Tag PDF file..." > temp.bat
 IF Errorlevel 1 (GOTO End)
 CALL temp.bat
 REM ECHO %FilePath%
 FOR %%F in (%FilePath%) do set FileName=%%~nF%%~xF
+
+IF %TagsOrCD%==TAGS GOTO NTChoices
 
 winput "Page Number" "SET TagPage=$input" ^
  "What page of %FileName% are your luggage tags on?^ ^You can determine this by opening the cruise documents in Adobe Reader or other PDF software." ^
@@ -449,7 +505,7 @@ IF Errorlevel 0 (GOTO NTReDo)
 
 :NTOpenPDF
 Wbox "Opening combined document..." ^
- "Press ''Open'' to open the combined PDF. When you are done, close your PDF reader to continue." "Open" /WW=320 /DB=1 /OT /AL
+ "Press ''Open'' to open the combined PDF. When you are done, close your PDF reader to continue." "Open..." /WW=320 /DB=1 /OT /AL
 
 ECHO Close your PDF reader to continue . . .
 %NTOutPath%
