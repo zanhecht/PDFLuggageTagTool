@@ -1,5 +1,5 @@
 ===============================================================
-PDF Luggage Tag Tool 2.5
+PDF Luggage Tag Tool v2.6 - Created 03/21/2014 by ahecht
 http://www3.zansstuff.com/luggage-tags
 ===============================================================
 
@@ -52,6 +52,18 @@ System Requirements
 The Luggage Tag Rearranger has only been personally tested on Windows 7, but should work on Windows XP or newer. You will also need a PDF reader such as Adobe Reader to view the files you create.
 
 ===============================================================
+Disclaimer
+===============================================================
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License (GPL) as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+The constituent programs included herein are distributed under the GPL or similar open licenses. Please see the included doc folder for more information.
+
+Royal Caribbean International® and Royal Caribbean® are trademarks of Royal Caribbean Cruises Ltd. or its subsidiaries. This program is in no way affiliated with nor endorsed by Royal Caribbean International or Royal Caribbean Cruises Ltd.
+
+===============================================================
 Version History
 ===============================================================
 
@@ -65,4 +77,5 @@ Version History
 2.2: Removed unnecessary files from installation.
 2.3: Renamed to PDF Luggage Tag Tool.
 2.4: Changed default output file names.
-2.5: Updated for new luggage tag PDFs and added download buttons
+2.5: Updated for new luggage tag PDFs and added download buttons.
+2.6: Sped up luggage tag generation.

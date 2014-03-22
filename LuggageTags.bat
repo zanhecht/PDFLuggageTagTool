@@ -1,6 +1,156 @@
 @ECHO OFF
 SETLOCAL ENABLEEXTENSIONS
 SETLOCAL ENABLEDELAYEDEXPANSION
+::===============================================================
+SET TitleStr=PDF Luggage Tag Tool v2.6 - Created 03/21/2014 by ahecht
+::http://www3.zansstuff.com/luggage-tags
+::===============================================================
+::
+::In 2012, Royal Caribbean International stopped mailing out luggage 
+::tags, and instead provided a page in the electronic PDF cruise 
+::documents that could be folded, stapled, and taped to create a do-it-
+::yourself luggage tag. This Windows program provides a few useful 
+::functions for dealing with the PDF luggage tags. I am not a 
+::programmer, so this program is a bit rough around the edges. Please 
+::feel free to post any issues, questions, or comments in the form at 
+::http://www3.zansstuff.com/luggage-tags#comments
+::
+::===============================================================
+::Functions
+::===============================================================
+::
+::Tag Rearranger
+::=====================
+::Many people, uncomfortable with the durability or hassle of taped and 
+::stapled luggage tags began cutting out the tags instead of folding, 
+::and either laminating them, sandwiching them in clear packing tape, 
+::or inserting them into vinyl bookmark holders or vinyl cruise tag 
+::holders from places like Favors By Serendipity or the Cruise Critic 
+::Cruise Store.Others would print them on full-sheet ink-jet or laser 
+::printer labels.
+::
+::If the tags are going to be cut out, using an entire piece of paper 
+::(or an entire full-sheet label) for each tag seemed like a waste. 
+::Therefore, the Tag Rearranger will extract the luggage tags from the 
+::Cruise Documents PDF and create a new PDF that has four tags on a 
+::single page. It also gives you the option of inserting a name into 
+::the "Guest Name" area of the tag so that you don't have to write it 
+::in by hand.
+::
+::Tag Labeler
+::=====================
+::Although the luggage tags include a line for "Guest Name", Royal 
+::Caribbean leaves this blank for you to fill in with a pen after 
+::printing. The Tag Labeler will insert the name of your choice onto 
+::the luggage tag, but leave the tag otherwise untouched and ready for 
+::folding, stapling, and taping
+::
+::PDF Utilities
+::=====================
+::A few useful tools for manipulating existing PDF files, including 
+::adding a 1/4" margin around the edge of a page, converting a 1-page 
+::PDF into a 2-page PDF with two identical pages, converting a PDF into 
+::an image file, and extracting a single page from a multi-page PDF.
+::
+::===============================================================
+::Instructions
+::===============================================================
+::
+::Step 1
+::=====================
+::If you do not already have your cruise documents or luggage tags in 
+::PDF form, download them to your computer.
+::
+::The cruise documents are different from your SetSail pass, and are 
+::usually not available from the Royal Caribbean web site until 40-49 
+::days before your cruise. The first page of the document should say 
+::"GUEST TICKET BOOKLET". If it says "SetSail" on the top, you do not 
+::have the correct document. If you do not already have your cruise 
+::documents, go to 
+::https://secure.royalcaribbean.com/edocs/displayBookingSelection.do 
+::and enter your information. If you're within 40-49 days of your 
+::cruise you should be able to download your Cruise Documents.
+::
+::The Luggage Tag PDF can be downloaded after completing online check-
+::in at royalcaribbean.com if you're within 40-49 days before your 
+::cruise.  If you do not already have this document, go to 
+::https://secure.royalcaribbean.com/beforeyouboard/boardingDocuments.do 
+::and enter your information on the right of the page to begin. Once 
+::you have finished on-line check in, if you're within 40-49 days of 
+::your cruise, you should see a ''PRINT PAPER LUGGAGE TAG'' button. 
+::Click it to download your luggage tags.
+::
+::Step 2
+::=====================
+::Download and run the Luggage Tag Rearranger installation file from 
+::the http://www3.zansstuff.com/luggage-tags
+::
+::This will extract the necessary files to a folder on your computer. 
+::To make it easy to find, the installation folder will by default 
+::create a folder called "LuggageTags" on your computer's desktop. It 
+::is recommended that you place your cruise documents PDF in this 
+::folder.
+::
+::Step 3
+::=====================
+::When the installation is finished, the program will automatically 
+::begin running. Follow the instructions to create your combined 
+::luggage tag PDF. To run the program again later, go to the folder 
+::you chose in Step 2 and double-click on the "Double-Click HERE to 
+::Begin!" shortcut.
+::
+::===============================================================
+::System Requirements
+::===============================================================
+::
+::The Luggage Tag Rearranger has only been personally tested on Windows 
+::7, but should work on Windows XP or newer. You will also need a PDF 
+::reader such as Adobe Reader to view the files you create.
+::
+::===============================================================
+::Disclaimer
+::===============================================================
+::
+::This program is free software; you can redistribute it and/or modify 
+::it under the terms of the GNU General Public License (GPL) as 
+::published by the Free Software Foundation; either version 2 of the 
+::License, or (at your option) any later version.
+::
+::This program is distributed in the hope that it will be useful, but 
+::WITHOUT ANY WARRANTY; without even the implied warranty of 
+::MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
+::General Public License for more details.
+::
+::The constituent programs included herein are distributed under the 
+::GPL or similar open licenses. Please see the included doc folder for 
+::more information.
+::
+::Royal Caribbean International® and Royal Caribbean® are trademarks 
+::of Royal Caribbean Cruises Ltd. or its subsidiaries. This program is 
+::in no way affiliated with nor endorsed by Royal Caribbean 
+::International or Royal Caribbean Cruises Ltd.
+::
+::===============================================================
+::Version History
+::===============================================================
+::
+::1.0: Initial Public Release. Added "Open..." dialog box to choose 
+::     input file instead of typing in name manually.
+::1.1: Replaced all DOS data entry with dialog boxes for PDF Rearranger.
+::1.2: Replaced all DOS data entry with dialog boxes for PDF Utilities.
+::1.3: Replaced "Open..." dialog box with "Save As..." dialog box when 
+::     choosing output file name (thanks Horst!)
+::1.4: Bug fixes
+::2.0: Added ability to just add name to tags without rearranging. Misc 
+::     bug fixes.
+::2.1: Improved workflow of PDF utilities. Misc bug fixes.
+::2.2: Removed unnecessary files from installation.
+::2.3: Renamed to PDF Luggage Tag Tool.
+::2.4: Changed default output file names.
+::2.5: Updated for new luggage tag PDFs and added download buttons.
+::2.6: Sped up luggage tag generation.
+::
+
 PATH=%PATH%;%~dp0\bin
 SET FileName=""
 SET TagPage=15
@@ -10,8 +160,7 @@ SET Size1=12
 SET Size2=12
 SET Size3=12
 SET Size4=12
-SET OutName=RCL4Tags.pdf
-SET TitleStr=PDF Luggage Tag Tool Version 2.5 Created 01/24/2014 by ahecht
+SET OutName=Lug_Tags.pdf
 
 
 :Start
@@ -212,39 +361,31 @@ ECHO Close this window to exit.
 ECHO.
 ECHO Rearranging Luggage Tags . . .
 START Wbusy "Rearranging Luggage Tags" " Extracting Tag from Docs..." /marquee
-gswin32c -q -dBATCH -dNOPAUSE -o tag1.tmp -sDEVICE=pdfwrite -dUseCropbox -dFirstPage=%TagPage% -dLastPage=%TagPage% %FilePath%
+gswin32c -q -dBATCH -dNOPAUSE -o tag.tmp -sDEVICE=pdfwrite -dUseCropbox -dFirstPage=%TagPage% -dLastPage=%TagPage% %FilePath%
 
 START Wbusy "Rearranging Luggage Tags" "Cropping Tag..." /marquee
-xvi32 tag1.tmp /S=bin\crop.xsc
-gswin32c -q -dBATCH -dNOPAUSE -o tag2.tmp -sDEVICE=pdfwrite -dUseCropbox tag1.tmp 2>NUL
-xvi32 tag2.tmp /S=bin\uncrop.xsc
-gswin32c -q -dBATCH -dNOPAUSE -o tagstamp.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [5.35 0]>>setpagedevice" -f tag2.tmp 2>NUL
-
-START Wbusy "Rearranging Luggage Tags" "Creating 4 tags..." /marquee
-gswin32c -q -dBATCH -dNOPAUSE -o tag1name.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=126 -dDEVICEHEIGHTPOINTS=792 ^
-     -c "/Helvetica-Narrow-Bold findfont %Size1% scalefont setfont newpath 63 370.2 moveto (%Name1%) dup stringwidth pop 2 div neg 0 rmoveto show quit" -f
-pdftk tagstamp.tmp stamp tag1name.tmp output tag1.tmp
-gswin32c -q -dBATCH -dNOPAUSE -o tag2name.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=126 -dDEVICEHEIGHTPOINTS=792 ^
-     -c "/Helvetica-Narrow-Bold findfont %Size2% scalefont setfont newpath 63 370.2 moveto (%Name2%) dup stringwidth pop 2 div neg 0 rmoveto show quit" -f
-pdftk tagstamp.tmp stamp tag2name.tmp output tag2.tmp
-gswin32c -q -dBATCH -dNOPAUSE -o tag3name.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=126 -dDEVICEHEIGHTPOINTS=792 ^
-     -c "/Helvetica-Narrow-Bold findfont %Size3% scalefont setfont newpath 63 370.2 moveto (%Name3%) dup stringwidth pop 2 div neg 0 rmoveto show quit" -f
-pdftk tagstamp.tmp stamp tag3name.tmp output tag3.tmp
-gswin32c -q -dBATCH -dNOPAUSE -o tag4name.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=126 -dDEVICEHEIGHTPOINTS=792 ^
-     -c "/Helvetica-Narrow-Bold findfont %Size4% scalefont setfont newpath 63 370.2 moveto (%Name4%) dup stringwidth pop 2 div neg 0 rmoveto show quit" -f
-pdftk tagstamp.tmp stamp tag4name.tmp output tag4.tmp
+xvi32 tag.tmp /S=bin\crop.xsc
+gswin32c -q -dBATCH -dNOPAUSE -o tag1.tmp -sDEVICE=pdfwrite -dUseCropbox tag.tmp 2>NUL
+xvi32 tag1.tmp /S=bin\uncrop.xsc
 
 START Wbusy "Rearranging Luggage Tags" "Arranging tags..." /marquee
-gswin32c -q -dBATCH -dNOPAUSE -o tag1s.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [-194.4 0]>>setpagedevice" -f tag1.tmp
-gswin32c -q -dBATCH -dNOPAUSE -o tag2s.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [-64.8 0]>>setpagedevice" -f tag2.tmp
-gswin32c -q -dBATCH -dNOPAUSE -o tag3s.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [64.8 0]>>setpagedevice" -f tag3.tmp
-gswin32c -q -dBATCH -dNOPAUSE -o tag4s.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [194.4 0]>>setpagedevice" -f tag4.tmp
+gswin32c -q -dBATCH -dNOPAUSE -o tag.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [-189.05 0]>>setpagedevice" -f tag1.tmp 2>NUL
+gswin32c -q -dBATCH -dNOPAUSE -o tag1.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [129.6 0]>>setpagedevice" -f tag.tmp 2>NUL
+pdftk tag.tmp stamp tag1.tmp output tag2.tmp
+gswin32c -q -dBATCH -dNOPAUSE -o tag1.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dFIXEDMEDIA -c "<</PageOffset [259.2 0]>>setpagedevice" -f tag2.tmp 2>NUL
+pdftk tag1.tmp stamp tag2.tmp output tag.tmp
 
-START Wbusy "Rearranging Luggage Tags" "Combining tags onto 1 page..." /marquee
-pdftk tag1s.tmp stamp tag2s.tmp output tag1.tmp
-pdftk tag1.tmp stamp tag3s.tmp output tag2.tmp
-pdftk tag2.tmp stamp tag4s.tmp output tag3.tmp
-gswin32c -q -dBATCH -dNOPAUSE -o tagstamp.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dDEVICEHEIGHTPOINTS=792 ^
+IF NOT DEFINED Name1 (
+	copy tag.tmp tag2.tmp /Y 1>NUL
+) ELSE (
+	START Wbusy "Rearranging Luggage Tags" "Adding names to tags..." /marquee
+	gswin32c -q -dBATCH -dNOPAUSE -o tag1.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dDEVICEHEIGHTPOINTS=792 ^
+	 -c "/Helvetica-Narrow-Bold findfont %Size1% scalefont setfont newpath 111.6 370.2 moveto (%Name1%) dup stringwidth pop 2 div neg 0 rmoveto show /Helvetica-Narrow-Bold findfont %Size2% scalefont setfont newpath 241.2 370.2 moveto (%Name2%) dup stringwidth pop 2 div neg 0 rmoveto show /Helvetica-Narrow-Bold findfont %Size3% scalefont setfont newpath 370.8 370.2 moveto (%Name3%) dup stringwidth pop 2 div neg 0 rmoveto show /Helvetica-Narrow-Bold findfont %Size4% scalefont setfont newpath 500.4 370.2 moveto (%Name4%) dup stringwidth pop 2 div neg 0 rmoveto show quit" -f
+	pdftk tag.tmp stamp tag1.tmp output tag2.tmp
+)
+
+START Wbusy "Rearranging Luggage Tags" "Adding cut lines..." /marquee
+gswin32c -q -dBATCH -dNOPAUSE -o tag1.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOINTS=612 -dDEVICEHEIGHTPOINTS=792 ^
      -c newpath 0 399.5 moveto 612 399.5 lineto 1 setlinewidth .784 setgray stroke ^
 	 newpath 46.8 0 moveto 46.8 792 lineto stroke ^
 	 newpath 176.4 0 moveto 176.4 792 lineto stroke ^
@@ -252,13 +393,12 @@ gswin32c -q -dBATCH -dNOPAUSE -o tagstamp.tmp -sDEVICE=pdfwrite -dDEVICEWIDTHPOI
 	 newpath 435.6 0 moveto 435.6 792 lineto stroke ^
 	 newpath 565.2 0 moveto 565.2 792 lineto stroke ^
 	 quit -f
-pdftk tag3.tmp stamp tagstamp.tmp output output.tmp
+pdftk tag2.tmp stamp tag1.tmp output %OutPath%
 
 START Wbusy "Rearranging Luggage Tags" "Cleaning up..." /marquee
-move /Y output.tmp %OutPath% 2>NUL
 del /F /Q *.tmp 2>NUL
 del /F /Q temp.bat 2>NUL
-wait 1.0
+wait 0.1
 Wbusy "Rearranging Luggage Tags" /stop
 
 Wbox "Rearranging Luggage Tags" "Luggage Tag Rearrangement Complete.^ ^Would you like to display the combined document?" "Yes;No" /WW=320 /DB=1 /OT /AL
