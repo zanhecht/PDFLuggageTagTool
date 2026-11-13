@@ -1,0 +1,14 @@
+Winput Ver. 1.27 (c) 2007-2012, Horst Schaeffer
+-----------------------------------------------
+
+http://www.horstmuc.de/w32dial.htm
+
+Disclaimer
+----------
+This program is freeware (c) Horst Schaeffer. No warranty, no liability of any kind.
+PureBasic Source: http://www.horstmuc.de/source/winput127.zip
+
+mailto:horst.schaeffer@gmx.net
+http://www.horstmuc.de/
+
+16 Sep 2012

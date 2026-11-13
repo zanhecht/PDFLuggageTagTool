@@ -1,0 +1,17 @@
+License and disclaimer agreement
+
+IMPORTANT - READ CAREFULLY
+
+This license and disclaimer statement constitutes a legal agreement ("License Agreement") between you (either as an individual or a single entity) and Christian Maas (the "Author"), for this software product ("Software"), including any software, media, and accompanying on-line or printed documentation.
+
+BY DOWNLOADING, INSTALLING, COPYING, OR OTHERWISE USING THE SOFTWARE, YOU AGREE TO BE BOUND BY ALL OF THE TERMS AND CONDITIONS OF THIS LICENSE AND DISCLAIMER AGREEMENT. If you do not agree with the terms and conditions of this agreement, you must promptly cease all use of the software and destroy all copies of this software and all of its component parts in your possession or under your control.
+
+This software is freeware. You can use this software royalty-free for private and commercial purposes.
+For Delphi components only: You are granted the permission to use my freeware DELPHI components in your own applications for private or commercial purposes, provided your software contains the copyright notice "(name of component) Copyright (c) by Christian Maas" where "(name of component)" is the appropriate name of my freeware component, e.g. TCMBtn.
+You can freely distribute copies of the main archive as long as no alterations are made to the contents and no charge is raised except a reasonable fee for distributing costs.
+You may not modify, reverse engineer, decompile, or disassemble the object code portions of this software.
+This Software is owned by Christian Maas and is protected by copyright law and international copyright treaty. Therefore, you must treat this Software like any other copyrighted material (e.g. books).
+This software is provided "as is" and without any warranties expressed or implied, including, but not limited to, implied warranties of fitness for a particular purpose, and non-infringement. You expressly acknowledge and agree that use of the Software is at your sole risk.
+In no event shall the author be liable for any damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information, or other pecuniary loss) arising out of the use of or inability to use this software or documentation, even if the author has been advised of the possibility of such damages.
+When downloading a file, you're granting the author the right to publish the name of the domain from where you access the file.
+Any feedback given to the author will be treated as non-confidential. The author may use any feedback free of charge without limitation.

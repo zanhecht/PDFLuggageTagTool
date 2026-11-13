@@ -1,0 +1,14 @@
+Wselect Ver. 2.13 (c) 2005-2011, Horst Schaeffer
+------------------------------------------------
+
+http://www.horstmuc.de/w32dial.htm
+
+Disclaimer
+----------
+This program is freeware (c) Horst Schaeffer. No warranty, no liability of any kind.
+PureBasic Source: http://www.horstmuc.de/source/wselect213.zip
+
+mailto:horst.schaeffer@gmx.net
+http://www.horstmuc.de/
+
+*18 nov 2012

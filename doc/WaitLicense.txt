@@ -1,0 +1,11 @@
+Wait (seconds) -  ver 1.01, 2011 by Horst Schaeffer
+---------------------------------------------------
+
+http://www.horstmuc.de/w32dial.htm
+
+PureBasic source:
+         http://www.horstmuc.de/source/wait101.zip
+
+
+14 Mar 2011
+mailto:horst.schaeffer@gmx.net
