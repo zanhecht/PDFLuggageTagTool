@@ -43,7 +43,7 @@ When the installation is finished, the program will automatically begin running.
 
 The PDF Luggage Tag Tool has only been personally tested on Windows 7, but should work on Windows XP or newer. You will also need a PDF reader such as Adobe Reader to view the files you create.
 
-User reports indicate that it will work on Mac OS X Snow Leopard or newer with the latest version of Parallels Desktop installed.
+User reports indicate that it will work on Mac OS X Snow Leopard or newer with the latest version of [Parallels Desktop](http://www.parallels.com/products/desktop) installed.
 
 # Version History
 
@@ -73,7 +73,7 @@ User reports indicate that it will work on Mac OS X Snow Leopard or newer with t
 
 # Use Without Installing
 
-If you want to manually extract the program into a folder without using my installation EXE, you can download the ZIP here.
+If you want to manually extract the program into a folder without using my installation EXE, you can download the ZIP [here](https://github.com/zanhecht/PDFLuggageTagTool/archive/refs/heads/main.zip).
 
 # Disclaimer
 
